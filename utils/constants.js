@@ -1,3 +1,5 @@
+const rateLimit = require('express-rate-limit');
+
 module.exports.REG_EXP_EMAIL = /[\w-.]+@([\w-]+\.)+[\w-]{2,4}/;
 module.exports.REG_EXP_URL = /https*:\/\/[\w\S]{1,}\.[\w\S]{1,}/;
 
@@ -13,3 +15,10 @@ module.exports.ERROR_MESSAGE_UNAUTHORIZED = 'Неправильные почта
 module.exports.ERROR_MESSAGE_URL = 'Неверная ссылка';
 module.exports.ERROR_MESSAGE_EMAIL = 'Некорректная почта';
 module.exports.ERROR_MESSAGE_NOT_FOUND = 'Указан неправильный путь';
+
+module.exports.limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+  standardHeaders: true,
+  legacyHeaders: false,
+});

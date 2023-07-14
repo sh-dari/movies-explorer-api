@@ -10,7 +10,7 @@ const mainRoute = require('./routes/index');
 const errorHandler = require('./middlewares/errorHandler');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
-const { PORT = 4000, DB_URL = 'mongodb://127.0.0.1:27017/bitfilmsdb' } = process.env;
+const { PORT = 3000, DB_URL = 'mongodb://127.0.0.1:27017/bitfilmsdb' } = process.env;
 
 const app = express();
 app.use(express.json());
@@ -29,7 +29,7 @@ app.use(limiter);
 mongoose.connect(DB_URL, {});
 
 const corsOptions = {
-  origin: 'http://localhost:3000',
+  // origin: 'http://localhost:4000',
   credentials: true,
 };
 app.use(cors(corsOptions));

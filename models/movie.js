@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { REG_EXP_URL } = require('../utils/constants');
+const { REG_EXP_URL, ERROR_MESSAGE_URL } = require('../utils/constants');
 
 const movieSchema = new mongoose.Schema({
   country: {
@@ -27,7 +27,7 @@ const movieSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator: (v) => REG_EXP_URL.test(v),
-      message: 'Неверная ссылка на изображение',
+      message: ERROR_MESSAGE_URL,
     },
   },
   trailerLink: {
@@ -35,7 +35,7 @@ const movieSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator: (v) => REG_EXP_URL.test(v),
-      message: 'Неверная ссылка на видео',
+      message: ERROR_MESSAGE_URL,
     },
   },
   thumbnail: {
@@ -43,7 +43,7 @@ const movieSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator: (v) => REG_EXP_URL.test(v),
-      message: 'Неверная ссылка на изображение',
+      message: ERROR_MESSAGE_URL,
     },
   },
   owner: {

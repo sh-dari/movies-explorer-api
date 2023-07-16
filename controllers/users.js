@@ -3,8 +3,12 @@ const validator = require('validator');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const ValidationError = require('../errors/ValidationError');
-const UnauthorizedError = require('../errors/UnauthorizedError');
 const ConflictError = require('../errors/ConflictError');
+const {
+  ERROR_MESSAGE_EMAIL,
+  ERROR_MESSAGE_USER_REPEAT,
+  MESSAGE_EXIT,
+} = require('../utils/constants');
 
 const { NODE_ENV, JWT_SECRET } = process.env;
 
@@ -29,9 +33,7 @@ module.exports.login = (req, res, next) => {
         })
         .send({ token });
     })
-    .catch(() => {
-      next(new UnauthorizedError('Пользователь не авторизован'));
-    });
+    .catch(next);
 };
 
 module.exports.createUser = (req, res, next) => {
@@ -45,7 +47,7 @@ module.exports.createUser = (req, res, next) => {
   bcrypt.hash(password, 10)
     .then((hash) => {
       if (!validator.isEmail(email)) {
-        throw new ValidationError('Введен некорректный адрес электронной почты');
+        throw new ValidationError(ERROR_MESSAGE_EMAIL);
       }
       User.create({
         name,
@@ -59,7 +61,7 @@ module.exports.createUser = (req, res, next) => {
         }))
         .catch((err) => {
           if (err.code === 11000) {
-            next(new ConflictError('Такой пользователь уже существует'));
+            next(new ConflictError(ERROR_MESSAGE_USER_REPEAT));
           } else {
             next(err);
           }
@@ -70,7 +72,7 @@ module.exports.createUser = (req, res, next) => {
 
 module.exports.exit = (req, res) => {
   res.clearCookie('jwt');
-  handleResponse(res, { message: 'Вы вышли' });
+  handleResponse(res, { message: MESSAGE_EXIT });
 };
 
 module.exports.getMe = (req, res, next) => {
@@ -87,5 +89,11 @@ module.exports.updateProfile = (req, res, next) => {
     { new: true, runValidators: true },
   )
     .then((data) => handleResponse(res, data))
-    .catch(next);
+    .catch((err) => {
+      if (err.code === 11000) {
+        next(new ConflictError(ERROR_MESSAGE_USER_REPEAT));
+      } else {
+        next(err);
+      }
+    });
 };

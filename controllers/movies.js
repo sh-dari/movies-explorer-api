@@ -3,6 +3,11 @@ const Movie = require('../models/movie');
 const NotFoundError = require('../errors/NotFoundError');
 const ValidationError = require('../errors/ValidationError');
 const ForbiddenError = require('../errors/ForbiddenError');
+const {
+  ERROR_MESSAGE_NOT_FOUND,
+  ERROR_MESSAGE_FORBIDDEN,
+  ERROR_MESSAGE_VALIDATION,
+} = require('../utils/constants');
 
 const handleResponse = (res, data) => res.status(200).send(data);
 
@@ -16,7 +21,7 @@ module.exports.deleteMovie = (req, res, next) => {
   Movie.findById(req.params.movieId)
     .then((data) => {
       if (!data) {
-        throw new NotFoundError('Запрашиваемый фильм не найден');
+        throw new NotFoundError(ERROR_MESSAGE_NOT_FOUND);
       }
       const owner = data.owner.toString();
       if (req.user._id === owner) {
@@ -26,12 +31,12 @@ module.exports.deleteMovie = (req, res, next) => {
           })
           .catch(next);
       } else {
-        throw new ForbiddenError('Невозможно удалить чужой фильм');
+        throw new ForbiddenError(ERROR_MESSAGE_FORBIDDEN);
       }
     })
     .catch((err) => {
       if (err instanceof mongoose.CastError) {
-        next(new ValidationError('Некорректные данные'));
+        next(new ValidationError(ERROR_MESSAGE_VALIDATION));
       } else {
         next(err);
       }

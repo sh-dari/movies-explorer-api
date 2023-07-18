@@ -21,6 +21,7 @@ module.exports.ERROR_MESSAGE_USER_REPEAT = 'Такой пользователь 
 module.exports.ERROR_MESSAGE_FORBIDDEN = 'Невозможно удалить чужой фильм';
 module.exports.ERROR_MESSAGE_VALIDATION = 'Некорректные данные';
 module.exports.MESSAGE_EXIT = 'Вы вышли';
+module.exports.ERROR_MESSAGE_NOT_FOUND_FILM = 'Запрашиваемый фильм не найден';
 
 module.exports.limiter = rateLimit({
   windowMs: 15 * 60 * 1000,

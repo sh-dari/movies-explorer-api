@@ -4,9 +4,9 @@ const NotFoundError = require('../errors/NotFoundError');
 const ValidationError = require('../errors/ValidationError');
 const ForbiddenError = require('../errors/ForbiddenError');
 const {
-  ERROR_MESSAGE_NOT_FOUND,
   ERROR_MESSAGE_FORBIDDEN,
   ERROR_MESSAGE_VALIDATION,
+  ERROR_MESSAGE_NOT_FOUND_FILM,
 } = require('../utils/constants');
 
 const handleResponse = (res, data) => res.status(200).send(data);
@@ -21,7 +21,7 @@ module.exports.deleteMovie = (req, res, next) => {
   Movie.findById(req.params.movieId)
     .then((data) => {
       if (!data) {
-        throw new NotFoundError(ERROR_MESSAGE_NOT_FOUND);
+        throw new NotFoundError(ERROR_MESSAGE_NOT_FOUND_FILM);
       }
       const owner = data.owner.toString();
       if (req.user._id === owner) {

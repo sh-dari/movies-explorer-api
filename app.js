@@ -21,7 +21,7 @@ app.use(helmet());
 mongoose.connect(DB_URL, {});
 
 const corsOptions = {
-  // origin: 'http://localhost:4000',
+  origin: 'http://localhost:3001',
   credentials: true,
 };
 app.use(cors(corsOptions));
